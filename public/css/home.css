@@ -1,0 +1,20 @@
+.navbar-brand span{
+	color: #479e47
+}
+.navbar-inverse{
+	border-radius: 0px  !important;
+}
+#board table{
+	border : 1px solid #009688;
+}
+._white{
+	color: white;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+._black{
+	color: grey;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+.ui-draggable-handle{
+	text-align: center;
+}

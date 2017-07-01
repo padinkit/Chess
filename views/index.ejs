@@ -2,19 +2,15 @@
 <html> 
   <head> 
     <title>Chess Game</title> 
-    <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script> 
-    <script type="text/javascript" src="js/jquery-ui-1.8.24.custom.min.js"></script> 
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> 
     <script type="text/javascript" src="js/garbochess.js"></script>
 	<script type="text/javascript" src="js/boardui.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+     <link rel="stylesheet" href="css/home.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	<script type="text/javascript">
-	    $(document).ready(function () {
-	        g_timeout = 1000;
-	        UINewGame();
-	    });
-    </script> 
+	
       <style type="text/css">
           #FenTextBox {
               width: 400px;
@@ -51,6 +47,9 @@
   	<nav class="navbar navbar-inverse"> 
   		<div class="container-fluid"> 
   			<div class="navbar-header"> 
+  			    <a class="navbar-brand" href="#">
+		         <span class="glyphicon glyphicon-tower" aria-hidden="true"></span>
+		        </a>
   				<button type="button" class="collapsed navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-9" aria-expanded="false"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button> 
   				<a href="#" class="navbar-brand">Chess</a> </div> 
   				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
@@ -58,7 +57,7 @@
 	  				 	<li class="active"><a href="#">Player Name</a></li> 
 	  				 </ul> 
 	  				 
-	  				 <button type="button" class="btn btn-success navbar-btn navbar-right">Start</button>
+	  				 <button type="button" class="btn btn-success navbar-btn navbar-right" data-toggle="modal" data-target="#myModal">Login</button>
   				 </div> 
   				 </div> 
   				 </nav>
@@ -78,7 +77,7 @@
   			</div>
   	  </div>
   	
-	  	<div class="col-md-8">
+	  	<div class="col-md-8 chessboard">
 	  	
 	  	<div>
 		        <div>
@@ -92,13 +91,13 @@
 		            </div>
 		        </div>
 		        <div style="margin-top:5px;">
-		        <div class="row">
-		        	<div class="col-md-5">
+		        <div class="">
+		        	<div >
   						<div id='board'></div> 
   	 				 </div>
-  	 				 <div class="col-md-4">
+  	 				 <div >
   						<span style="display:none" id='output'></span><br/> 
-			            <textarea cols='50' rows='15' id='PgnTextBox'></textarea><br/>
+			            <textarea cols='50' rows='4' id='PgnTextBox'></textarea><br/>
   	 				 </div>
 		        
 		        </div>
@@ -120,6 +119,36 @@
 	  	</div>
   	
   	</div>
+  	
+  	
+  	
+  	
+  	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Login</h4>
+      </div>
+      <div class="modal-body">
+        <div class="input-group input-group-lg">
+		  <span class="input-group-addon glyphicon glyphicon-user" id="sizing-addon1"></span>
+		  <input type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
+		</div>
+		
+		 <div class="input-group input-group-lg">
+		  <span class="input-group-addon glyphicon glyphicon-user" id="sizing-addon1"></span>
+		  <input type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
+		</div>
+		
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Sign In</button>
+      </div>
+    </div>
+  </div>
+</div>
   
     
   </body> 
