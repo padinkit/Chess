@@ -1,4 +1,4 @@
-"use strict";
+
 
 // Perf TODO:
 // Merge material updating with psq values

@@ -1,5 +1,10 @@
 $( document ).ready(function() {
 
+	
+	g_timeout = 1000;
+    UINewGame();
+
+});
 
 	var g_startOffset = null;
 	var g_selectedPiece = null;
@@ -398,7 +403,3 @@ $( document ).ready(function() {
 	}
 
 	
-	g_timeout = 1000;
-    UINewGame();
-
-});
