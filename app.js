@@ -6,10 +6,11 @@
 var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
-  , http = require('http')
+  , app = express()
+  , http = require('http').createServer(app)
+  , io = require('socket.io')(http)
   , path = require('path');
 
-var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -30,6 +31,19 @@ if ('development' == app.get('env')) {
 app.get('/', routes.index);
 app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+io.on('connection', function(socket){
+	console.log('connectiong made');
+	socket.on('chat',function(data){
+		console.log(data.msg);
+		io.emit('chat',data);
+	});
 });
+
+/*http.createServer(app).listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+});*/
+
+http.listen(app.get('port'), function(){
+	  console.log('Express server listening on port: ' + app.get('port'));
+});
+

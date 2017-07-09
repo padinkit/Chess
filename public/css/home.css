@@ -10,10 +10,16 @@
 ._white{
 	color: white;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    vertical-align: middle;
+    display: table-cell;
+    text-align: center;
 }
 ._black{
 	color: grey;
     text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    vertical-align: middle;
+    display: table-cell;
+    text-align: center;
 }
 .ui-draggable-handle{
 	text-align: center;

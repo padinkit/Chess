@@ -1,16 +1,13 @@
 <!-- saved from url=(0014)about:internet --> 
-<html> 
+<html ng-app="chess"> 
   <head> 
     <title>Chess Game</title> 
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script> 
-    <script type="text/javascript" src="js/garbochess.js"></script>
-	<script type="text/javascript" src="js/boardui.js"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+   
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-     <link rel="stylesheet" href="css/home.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	
+	 
+	 <link rel="stylesheet" href="css/chessboard.css">
+	 <link rel="stylesheet" href="css/home.css">
       <style type="text/css">
           #FenTextBox {
               width: 400px;
@@ -43,7 +40,7 @@
 		  }
       </style>
   </head> 
-  <body> 
+  <body ng-controller="playController"> 
   	<nav class="navbar navbar-inverse"> 
   		<div class="container-fluid"> 
   			<div class="navbar-header"> 
@@ -78,43 +75,18 @@
   	  </div>
   	
 	  	<div class="col-md-8 chessboard">
+	  	Player : {{playername}}
 	  	
+	  	 <div id="chatWindow">
+    	
+    	</div>
 	  	<div>
-		        <div>
-		            <a href="javascript:UINewGame()">New game</a>
-		            <select onchange="javascript:UIChangeStartPlayer()">
-		                <option value="white">White</option>
-		                <option value="black">Black</option>
-		            </select>
-		            <div style="display:none">
-		              Time per move: <input id="TimePerMove" value="500" onchange="javascript:UIChangeTimePerMove()" />ms
-		            </div>
-		        </div>
-		        <div style="margin-top:5px;">
-		        <div class="">
-		        	<div >
-  						<div id='board'></div> 
-  	 				 </div>
-  	 				 <div >
-  						<span style="display:none" id='output'></span><br/> 
-			            <textarea cols='50' rows='4' id='PgnTextBox'></textarea><br/>
-  	 				 </div>
-		        
-		        </div>
-		       
-			        <div style="display:none">
-			            <a id='AnalysisToggleLink' href="javascript:UIAnalyzeToggle()">Analysis: Off</a>
-			        </div>
-			        <div style="display:none">
-			        FEN: <input id='FenTextBox' onchange="javascript:UIChangeFEN()"/>
-			        </div>
-			        </div>
-			        <div style="display:none">
-						<h2>About</h2>
-						<p>It started as a feasibility project to see how Javascript could do in Chess, then languished until Chrome came along.</p>
-						<a href="..\projects.html">Back to Projects</a>
-					</div>
-     </div> 
+			<div id="board" style="width: 600px;"></div>
+			<p>Status: <span id="status"></span></p>
+			<p>FEN: <span id="fen"></span></p>
+			<p>PGN: <span id="pgn"></span></p>
+			<input id="startPositionBtn" value="Start Position" type="button">
+		</div> 
 	  	
 	  	</div>
   	
@@ -124,32 +96,77 @@
   	
   	
   	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Login</h4>
-      </div>
-      <div class="modal-body">
-        <div class="input-group input-group-lg">
-		  <span class="input-group-addon glyphicon glyphicon-user" id="sizing-addon1"></span>
-		  <input type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
-		</div>
-		
-		 <div class="input-group input-group-lg">
-		  <span class="input-group-addon glyphicon glyphicon-user" id="sizing-addon1"></span>
-		  <input type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
-		</div>
-		
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Sign In</button>
-      </div>
-    </div>
-  </div>
-</div>
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Login</h4>
+	      </div>
+	      <div class="modal-body">
+	        <div class="input-group input-group-lg">
+			  <span class="input-group-addon glyphicon glyphicon-user" id="sizing-addon1"></span>
+			  <input type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
+			</div>
+			
+			 <div class="input-group input-group-lg">
+			  <span class="input-group-addon glyphicon glyphicon-user" id="sizing-addon1"></span>
+			  <input type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
+			</div>
+			
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Sign In</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
   
-    
+  
+  
+  	<div class="modal fade" id="playgame" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Play</h4>
+	      </div>
+	      <div class="modal-body">
+	      	<div class="input-group input-group-lg">
+			  <span class="input-group-addon glyphicon glyphicon-user" id="sizing-addon1"></span>
+			  <input type="text" class="form-control" placeholder="Player Name" aria-describedby="sizing-addon1" ng-model="playername">
+			</div>
+			
+			<br>
+	        <div class="input-group input-group-lg">
+	          <div class="input-group-addon">Play Against</div>
+			  <select  class="form-control" ng-model="against">
+			  	<option>Computer</option>
+			  	<option>Other Players</option>
+			  </select>
+			</div>
+			
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-primary" id="startGame" ng-click="startGame()">Play</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<script src="js/jquery-1.10.1.min.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="js/cinnamon_engine.js"></script>
+	<script src="js/chess.js"></script>
+	<script src="js/json3.min.js"></script>
+	
+	<script src="js/chessboard.js"></script>
+	<script src="js/cinnamon.js"></script>
+   
+	 
+	
+     
   </body> 
 </html> 
