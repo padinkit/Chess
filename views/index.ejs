@@ -66,8 +66,23 @@
   			</div>
   			
   			<div class="chess_lost">
-  				<p><b>Chess Pieces Lost</b></p>
-  				<img src="img/chess_piece.jpg" alt="Smiley face" height="120" width="150">
+  				<p><b>Chess Pieces Captured</b></p>
+  				<div class="row">
+  					<div class="col-sm-6">
+  						<h5>White</h5>
+  						<div class="captured_pieces">
+  							<span ng-repeat="piece in capturedPieces.white track by $index" ng-class="piecesIcon(piece, 'white')"></span>
+  						</div>
+  					</div>
+  					<div class="col-md-6">
+  						<h5>Black</h5>
+  						<div class="captured_pieces">
+  							<span ng-repeat="piece in capturedPieces.black track by $index" ng-class="piecesIcon(piece, 'black')"></span>		
+  						</div>
+  					</div>
+  					
+  					
+  				</div>
   			</div>
   			<div class="chess_lost">
   				<a class="btn btn-warning" href="javascript:UIUndoMove()">Reset Last Move</a>
@@ -76,7 +91,7 @@
   	
 	  	<div class="col-md-8 chessboard">
 	  	Player : {{playername}}
-	  	
+	  	{{userData}}
 	  	 <div id="chatWindow">
     	
     	</div>
@@ -132,18 +147,26 @@
 	        <h4 class="modal-title" id="myModalLabel">Play</h4>
 	      </div>
 	      <div class="modal-body">
-	      	<div class="input-group input-group-lg">
-			  <span class="input-group-addon glyphicon glyphicon-user" id="sizing-addon1"></span>
-			  <input type="text" class="form-control" placeholder="Player Name" aria-describedby="sizing-addon1" ng-model="playername">
+	      
+	      	<div ng-if="!waiting">
+		      	<div class="input-group input-group-lg">
+				  <span class="input-group-addon glyphicon glyphicon-user" id="sizing-addon1"></span>
+				  <input type="text" class="form-control" placeholder="Player Name" aria-describedby="sizing-addon1" ng-model="playername">
+				</div>
+				
+				<br>
+		        <div class="input-group input-group-lg">
+		          <div class="input-group-addon">Play Against</div>
+				  <select  class="form-control" ng-model="against">
+				  	<option>Computer</option>
+				  	<option>Other Players</option>
+				  </select>
+				</div>
 			</div>
 			
-			<br>
-	        <div class="input-group input-group-lg">
-	          <div class="input-group-addon">Play Against</div>
-			  <select  class="form-control" ng-model="against">
-			  	<option>Computer</option>
-			  	<option>Other Players</option>
-			  </select>
+			<div ng-if="waiting">
+				<h3 class="text-center">Waiting For PLayers to Join</h3>
+				<h3 class="text-center">{{waitTime}} Secs</h3>
 			</div>
 			
 	      </div>
