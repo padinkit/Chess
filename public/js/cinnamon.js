@@ -18,7 +18,7 @@ app.config([function(){
 }]);
 
 
-app.controller('playController',['$scope','$http','$interval',function($scope, $http, $interval){
+app.controller('playController',['$scope','$http','$interval','$timeout',function($scope, $http, $interval, $timeout){
 	
 	var socket, game, updateStatus;
 	
@@ -83,6 +83,8 @@ app.controller('playController',['$scope','$http','$interval',function($scope, $
 		  //
 		  if($scope.noAI){
 			  socket.emit('chessmoves', {move : {from : source , to: target } , side : $scope.userData.side , matchId: $scope.userData.matchId});  
+			  $scope.showOverlay = true;
+			  $scope.$apply();
 		  }
 		  updateStatus($scope.userData.side);
 		};
@@ -148,49 +150,50 @@ app.controller('playController',['$scope','$http','$interval',function($scope, $
 
 		 updateStatus = function(side) {
 		  var moveColor;
-		  if(side ==="white"){
-			  if (game.turn() === 'b') {
+			  if (game.turn() === 'b' && $scope.userData.side === "white") {
 					engineGo();	    
 			  }
-		  }
-		  else{
-			  if (game.turn() === 'w') {
+
+			  if (game.turn() === 'w' && $scope.userData.side === "black") {
 					engineGo();	    
 			  }
-		  }
+
 		  var status = '';
 
-		  if(side ==="white"){
-			  //if (game.turn() === 'b') {
+		 // if(side ==="white"){
+			  if (game.turn() === 'b') {
 			    moveColor = 'Black';
-			  //}
-		  }
-		  else{
-			 // if (game.turn() === 'w') {
+			  }
+		//  }
+		//  else{
+			  if (game.turn() === 'w') {
 			    moveColor = 'White';
-			  //}
-		  }
+			  }
+		 // }
 
 		  // checkmate?
 		  if (game.in_checkmate() === true) {
 		    status = 'Game over, ' + moveColor + ' is in checkmate.';
+		    toastr.error('Game over, ' + moveColor + ' is in checkmate.');
 		  }
 
 		  // draw?
 		  else if (game.in_draw() === true) {
 		    status = 'Game over, drawn position';
+		    toastr.error('Game over, drawn position');
 		  }
 
 		  // game still on
 		  else {
-			if(moveColor){
+			/*if(moveColor){
 				moveColor = $scope.userData.side;
-			}
+			}*/
 		    status = moveColor + ' to move';
 
 		    // check?
 		    if (game.in_check() === true) {
 		      status += ', ' + moveColor + ' is in check';
+		      toastr.warning(moveColor + ' is in check');
 		    }
 		  }
 
@@ -231,7 +234,8 @@ app.controller('playController',['$scope','$http','$interval',function($scope, $
 	    });
 		
 	    $scope.startGame = function(){
-	    	
+	    	$scope.playername = $('#playername').val();
+	    	$scope.against = $('#against').val()
 	    	if($scope.against === "Computer" ){
 	    		$scope.userData = {};
 	    		$scope.userData.side = "white";
@@ -252,7 +256,7 @@ app.controller('playController',['$scope','$http','$interval',function($scope, $
     				  }
     		    	board.move(data.move.from +'-'+ data.move.to);
     		    	
-    		    	setTimeout(function(){ 
+    		    	$timeout(function(){ 
 	    		    	if($scope.userData.side === "white"){
 	    		    		updateStatus("black");
 	    		    		
@@ -260,6 +264,8 @@ app.controller('playController',['$scope','$http','$interval',function($scope, $
 	    		    	else{
 	    		    		updateStatus("white");
 	    		    	}
+	    		    	$scope.showOverlay = false;
+	    		    	$scope.$apply();
     		    	}, 500);
     		    });
     		    
@@ -267,6 +273,10 @@ app.controller('playController',['$scope','$http','$interval',function($scope, $
     		     	$('#playgame').modal('hide');
     		     	$interval.cancel(waitTimer);
     		     	$scope.userData = data;
+    		     	if($scope.userData.side === 'black'){
+    		     		$scope.showOverlay = true;
+    		     		 $scope.$apply();
+    		     	}
     		    	init();  		    	
     		    });
 	    		    
@@ -280,7 +290,8 @@ app.controller('playController',['$scope','$http','$interval',function($scope, $
 		    		
 		    		$scope.waitTime = 0;
 		    		waitTimer = $interval(function () {
-		    			;$scope.waitTime +=1 
+		    			$scope.waitTime +=1 ;
+		    			$scope.waitTimeDisplay = timeParser($scope.waitTime);
 	    		    }, 1000);
 				});
 	    	}
@@ -322,6 +333,29 @@ app.controller('playController',['$scope','$http','$interval',function($scope, $
 	    	}
 	    	else if(piece+color == 'rblack'){
 	    		return "glyphicon glyphicon-tower _black";
+	    	}
+	    }
+	    
+	    
+	    
+	    function timeParser (sec) {
+	    	var minutes = Math.floor(sec / 60);
+	    	var seconds = Math.round(sec % 60);
+	    	var hours = 0;
+	    	
+	    	if(sec >= 3600){
+	    		hours = Math.floor(minutes / 60);
+	    		minutes = Math.round(minutes % 60)
+	    	}
+	    	
+	    	if(minutes === 0 && hours === 0 ){
+	    		return seconds;
+	    	}
+	    	else if (hours === 0){
+	    		return minutes + " : " +seconds;
+	    	}
+	    	else{
+	    		return hours + " : " + minutes + " : " +seconds;
 	    	}
 	    }
 
